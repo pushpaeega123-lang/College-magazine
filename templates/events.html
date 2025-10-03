@@ -1,0 +1,81 @@
+{% extends "student_base.html" %}
+
+{% block title %}Events - St. Ann's College Magazine{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">College Events</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for event in events %}
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+            {% if event.image_id %}
+            <div class="h-48 w-full overflow-hidden">
+                <img src="{{ url_for('events_image', file_id=event.image_id) }}" 
+                    alt="{{ event.title }}"
+                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+            </div>
+            {% endif %}
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-2">{{ event.title }}</h2>
+                <p class="text-gray-600 mb-4">{{ event.description[:150] }}{% if event.description|length > 150 %}...{% endif %}</p>
+                <div class="space-y-2 text-sm text-gray-500 mb-4">
+                    <p class="flex items-center">
+                        <i class="far fa-calendar-alt mr-2"></i>
+                        <span>{{ event.date.strftime('%B %d, %Y') if 'date' in event else 'Date not specified' }}</span>
+                    </p>
+                    <p class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>{{ event.location or 'Location not specified' }}</span>
+                    </p>
+                </div>
+                {% if session.student_id %}
+                <button onclick="registerForEvent('{{ event._id }}')" 
+                    class="w-full bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors">
+                    Register for Event
+                </button>
+                {% else %}
+                <a href="{{ url_for('student_login') }}" 
+                    class="block text-center bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                    Login to Register
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not events %}
+    <div class="text-center text-gray-500 mt-8">
+        <p>No upcoming events at the moment.</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function registerForEvent(eventId) {
+    if (confirm('Are you sure you want to register for this event?')) {
+        fetch(`/events/register/${eventId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Successfully registered for the event!');
+                // Optionally update the UI to show registration
+            } else {
+                alert(data.message || 'Failed to register for the event.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while processing your request.');
+        });
+    }
+}
+</script>
+{% endblock %}

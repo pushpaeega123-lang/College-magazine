@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin - St. Ann's College Magazine{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .admin-form-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .admin-form-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('admin_dashboard') }}" class="flex-shrink-0 flex items-center">
+                        <h1 class="text-xl font-bold text-white">SACET Admin Panel</h1>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{{ url_for('admin_dashboard') }}" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="{{ url_for('admin_news') }}" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">News</a>
+                    <a href="{{ url_for('admin_events') }}" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Events</a>
+                    <a href="{{ url_for('admin_gallery') }}" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Gallery</a>
+                    <a href="{{ url_for('admin_logout') }}" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">Logout</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-white hover:text-gray-200 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-purple-800">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{{ url_for('admin_dashboard') }}" class="text-white hover:bg-purple-700 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="{{ url_for('admin_news') }}" class="text-white hover:bg-purple-700 block px-3 py-2 rounded-md text-base font-medium">News</a>
+                <a href="{{ url_for('admin_events') }}" class="text-white hover:bg-purple-700 block px-3 py-2 rounded-md text-base font-medium">Events</a>
+                <a href="{{ url_for('admin_gallery') }}" class="text-white hover:bg-purple-700 block px-3 py-2 rounded-md text-base font-medium">Gallery</a>
+                <a href="{{ url_for('admin_logout') }}" class="text-white hover:bg-purple-700 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                {% for category, message in messages %}
+                    <div class="alert-{{ category }} p-4 mb-4 rounded-lg {% if category == 'error' %}bg-red-100 border-red-500 text-red-700{% else %}bg-green-100 border-green-500 text-green-700{% endif %}">
+                        {{ message }}
+                        <button onclick="this.parentElement.remove()" class="float-right text-xl font-bold cursor-pointer">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- JavaScript for mobile menu -->
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

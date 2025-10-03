@@ -1,0 +1,1 @@
+# College-magazine-application

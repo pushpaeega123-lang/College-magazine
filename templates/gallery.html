@@ -1,0 +1,106 @@
+{% extends "student_base.html" %}
+
+{% block title %}Gallery - St. Ann's College Magazine{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">College Gallery</h1>
+
+    <!-- Image Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for image in images %}
+        <div class="relative group cursor-pointer" 
+             onclick="openLightbox('{{ url_for('gallery_image', file_id=image.image_id) }}', '{{ image.title }}', '{{ image.description or '' }}')">
+            <div class="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg shadow-lg">
+                {% if image.image_id %}
+                <img src="{{ url_for('gallery_image', file_id=image.image_id) }}" 
+                    alt="{{ image.title }}"
+                    class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110">
+                {% else %}
+                <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span class="text-gray-400">No image</span>
+                </div>
+                {% endif %}
+                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="text-center text-white p-4">
+                            <h3 class="text-lg font-semibold">{{ image.title or 'Untitled' }}</h3>
+                            {% if image.description %}
+                            <p class="text-sm mt-2">{{ image.description }}</p>
+                            {% endif %}
+                            {% if image.date %}
+                            <p class="text-xs mt-2 text-gray-300">
+                                {{ image.date.strftime('%B %d, %Y') if 'date' in image else '' }}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not images %}
+    <div class="text-center text-gray-500 mt-8">
+        <p>No images available in the gallery.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50">
+    <div class="absolute top-4 right-4">
+        <button onclick="closeLightbox()" class="text-white hover:text-gray-300">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+    </div>
+    <div class="flex items-center justify-center h-full">
+        <div class="max-w-4xl w-full mx-4">
+            <img id="lightbox-image" src="" alt="" class="w-full h-auto max-h-[80vh] object-contain">
+            <div class="text-white mt-4 text-center">
+                <h3 id="lightbox-title" class="text-xl font-semibold"></h3>
+                <p id="lightbox-description" class="mt-2 text-gray-300"></p>
+                <p id="lightbox-date" class="mt-2 text-sm text-gray-400"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openLightbox(imageSrc, title, description) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-image');
+    const lightboxTitle = document.getElementById('lightbox-title');
+    const lightboxDesc = document.getElementById('lightbox-description');
+    
+    lightboxImg.src = imageSrc;
+    lightboxImg.alt = title;
+    lightboxTitle.textContent = title || '';
+    lightboxDesc.textContent = description || '';
+    
+    lightbox.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// Close lightbox when clicking outside the image
+document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeLightbox();
+    }
+});
+
+// Close lightbox with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeLightbox();
+    }
+});
+</script>
+{% endblock %}

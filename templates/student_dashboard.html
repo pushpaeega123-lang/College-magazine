@@ -1,0 +1,100 @@
+{% extends "student_base.html" %}
+
+{% block title %}Student Dashboard - St. Ann's College Magazine{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Welcome Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Welcome, {{ session.student_name }}!</h1>
+        <p class="text-gray-600 mt-2">Stay updated with the latest happenings at St. Ann's College.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Recent News Section -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Recent News</h2>
+                <div class="space-y-6">
+                    {% for news_item in recent_news %}
+                    <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                        {% if news_item.image_id %}
+                        <img src="{{ url_for('news_image', file_id=news_item.image_id) }}" 
+                            alt="{{ news_item.title }}"
+                            class="w-full h-48 object-cover rounded-lg mb-4">
+                        {% endif %}
+                        <h3 class="text-lg font-semibold text-gray-800">{{ news_item.title }}</h3>
+                        <p class="text-gray-600 mt-2">{{ news_item.content[:150] }}{% if news_item.content|length > 150 %}...{% endif %}</p>
+                        <p class="text-sm text-gray-500 mt-2">
+                            {{ news_item.date_posted.strftime('%B %d, %Y') if 'date_posted' in news_item else '' }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-6">
+                    <a href="{{ url_for('news') }}" class="text-purple-600 hover:text-purple-700 font-medium">View all news →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-8">
+            <!-- Upcoming Events Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Your Upcoming Events</h2>
+                <div class="space-y-4">
+                    {% for event in upcoming_events %}
+                    <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                        <h3 class="text-lg font-semibold text-gray-800">{{ event.title }}</h3>
+                        <div class="text-sm text-gray-500 space-y-1 mt-2">
+                            <p class="flex items-center">
+                                <i class="far fa-calendar-alt mr-2"></i>
+                                <span>{{ event.date.strftime('%B %d, %Y') if 'date' in event else 'N/A' }}</span>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                <span>{{ event.location or 'Location not specified' }}</span>
+                            </p>
+                        </div>
+                        <div class="mt-2">
+                            <a href="{{ url_for('register_for_event', event_id=event._id) }}" 
+                               class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm">
+                                Register Now
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-gray-500">No upcoming events at the moment.</p>
+                    {% endfor %}
+                </div>
+                <div class="mt-4">
+                    <a href="{{ url_for('events') }}" class="text-purple-600 hover:text-purple-700 text-sm font-medium">View all events →</a>
+                </div>
+            </div>
+
+            <!-- Gallery Preview -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Gallery</h2>
+                <div class="grid grid-cols-3 gap-2">
+                    {% for image in recent_images %}
+                    <div class="aspect-square overflow-hidden rounded-lg">
+                        {% if image.image_id %}
+                        <img src="{{ url_for('gallery_image', file_id=image.image_id) }}" 
+                             alt="{{ image.title }}"
+                             class="w-full h-full object-cover hover:opacity-90 transition-opacity">
+                        {% else %}
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                            <span class="text-xs">No image</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-4">
+                    <a href="{{ url_for('gallery') }}" class="text-purple-600 hover:text-purple-700 text-sm font-medium">View full gallery →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}St. Ann's College Magazine{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="flex-shrink-0 flex items-center">
+                        <h1 class="text-xl font-bold text-white">St. Ann's College</h1>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    {% if session.student_id %}
+                        <a href="{{ url_for('student_dashboard') }}" class="bg-white text-purple-600 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-100">Dashboard</a>
+                        <a href="{{ url_for('student_logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('student_login') }}" class="bg-white text-purple-600 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-100">Login</a>
+                        <a href="{{ url_for('student_register') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium">Register</a>
+                    {% endif %}
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-white hover:text-gray-200 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-purple-700">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                {% if session.student_id %}
+                    <a href="{{ url_for('student_dashboard') }}" class="text-white hover:bg-purple-600 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                    <a href="{{ url_for('student_logout') }}" class="text-white hover:bg-purple-600 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('student_login') }}" class="text-white hover:bg-purple-600 block px-3 py-2 rounded-md text-base font-medium">Login</a>
+                    <a href="{{ url_for('student_register') }}" class="text-white hover:bg-purple-600 block px-3 py-2 rounded-md text-base font-medium">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                {% for category, message in messages %}
+                    <div class="alert-{{ category }} p-4 mb-4 rounded-lg {% if category == 'error' %}bg-red-100 border-red-500 text-red-700{% else %}bg-green-100 border-green-500 text-green-700{% endif %}">
+                        {{ message }}
+                        <button onclick="this.parentElement.remove()" class="float-right text-xl font-bold cursor-pointer">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- JavaScript for mobile menu -->
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

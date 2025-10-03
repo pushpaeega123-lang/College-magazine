@@ -1,0 +1,59 @@
+{% extends "landing_base.html" %}
+
+{% block title %}Home - St. Ann's College Magazine{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Welcome to St. Ann's College Magazine</h1>
+        <p class="text-xl text-gray-600 mb-8">Stay updated with the latest news, events, and memories from our college</p>
+        {% if not session.student_id %}
+            <div class="space-x-4">
+                <a href="{{ url_for('student_register') }}" class="inline-block bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition duration-300">Register Now</a>
+                <a href="{{ url_for('student_login') }}" class="inline-block bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300">Student Login</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Featured Sections -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <!-- News Section -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Latest News</h2>
+                <p class="text-gray-600 mb-4">Stay informed about the latest happenings and announcements from our college.</p>
+                <a href="{{ url_for('news') }}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">Read News</a>
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Upcoming Events</h2>
+                <p class="text-gray-600 mb-4">Discover and participate in various events happening in our college.</p>
+                <a href="{{ url_for('events') }}" class="inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">View Events</a>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Photo Gallery</h2>
+                <p class="text-gray-600 mb-4">Browse through memories captured during various college events and activities.</p>
+                <a href="{{ url_for('gallery') }}" class="inline-block bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition duration-300">Visit Gallery</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for mobile menu -->
+<script>
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
+{% endblock %}

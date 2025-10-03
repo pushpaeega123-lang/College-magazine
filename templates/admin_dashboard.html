@@ -1,0 +1,103 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Admin Dashboard - St. Ann's College Magazine{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Admin Dashboard</h1>
+        <p class="text-gray-600">Welcome to the admin dashboard. Manage news, events, and gallery from here.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <!-- News Stats -->
+        <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Total News</p>
+                    <h3 class="text-2xl font-bold text-gray-800">{{ news_count }}</h3>
+                </div>
+                <div class="text-purple-500">
+                    <i class="fas fa-newspaper text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Stats -->
+        <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Total Events</p>
+                    <h3 class="text-2xl font-bold text-gray-800">{{ events_count }}</h3>
+                </div>
+                <div class="text-purple-500">
+                    <i class="fas fa-calendar-alt text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Stats -->
+        <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Gallery Images</p>
+                    <h3 class="text-2xl font-bold text-gray-800">{{ gallery_count }}</h3>
+                </div>
+                <div class="text-purple-500">
+                    <i class="fas fa-images text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students Stats -->
+        <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Registered Students</p>
+                    <h3 class="text-2xl font-bold text-gray-800">{{ students_count }}</h3>
+                </div>
+                <div class="text-purple-500">
+                    <i class="fas fa-users text-3xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- News Management -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">News Management</h2>
+                <div class="space-y-3">
+                    <a href="{{ url_for('admin_news') }}" class="block w-full text-center bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition duration-300">View All News</a>
+                    <a href="{{ url_for('admin_add_news') }}" class="block w-full text-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">Add New News</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Management -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Events Management</h2>
+                <div class="space-y-3">
+                    <a href="{{ url_for('admin_events') }}" class="block w-full text-center bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition duration-300">View All Events</a>
+                    <a href="{{ url_for('admin_add_event') }}" class="block w-full text-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">Add New Event</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Management -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Gallery Management</h2>
+                <div class="space-y-3">
+                    <a href="{{ url_for('admin_gallery') }}" class="block w-full text-center bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition duration-300">View Gallery</a>
+                    <a href="{{ url_for('admin_add_image') }}" class="block w-full text-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">Add New Image</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
